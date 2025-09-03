@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import netlify from '@netlify/vite-plugin';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -9,17 +8,7 @@ export default defineConfig({
       // React Fast Refresh configuration
       fastRefresh: true,
       // Include .jsx files for Fast Refresh
-      include: "**/*.jsx",
-      // Babel configuration for better JSX handling
-      babel: {
-        plugins: [
-          // Add any additional babel plugins here if needed
-        ]
-      }
-    }),
-    netlify({
-      // Netlify Functions configuration
-      functionsDir: 'netlify/functions',
+      include: "**/*.jsx"
     })
   ],
   
@@ -78,9 +67,6 @@ export default defineConfig({
         chunkFileNames: 'js/[name]-[hash].js',
         entryFileNames: 'js/[name]-[hash].js',
       },
-      
-      // External dependencies (if any)
-      external: [],
     },
     
     // Chunk size warning limit
@@ -96,20 +82,6 @@ export default defineConfig({
     open: true,
     host: true, // Listen on all addresses
     cors: true,
-    
-    // Proxy configuration for API calls during development
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8888', // Netlify Dev server
-        changeOrigin: true,
-        secure: false,
-      },
-      '/.netlify/functions': {
-        target: 'http://localhost:8888',
-        changeOrigin: true,
-        secure: false,
-      }
-    },
     
     // HMR configuration
     hmr: {
@@ -140,12 +112,6 @@ export default defineConfig({
     postcss: {
       plugins: [],
     },
-    
-    // CSS modules configuration
-    modules: {
-      generateScopedName: '[name]__[local]___[hash:base64:5]',
-      hashPrefix: 'prefix',
-    },
   },
 
   // Dependency optimization
@@ -167,11 +133,11 @@ export default defineConfig({
   // Resolve configuration
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@components': resolve(__dirname, 'src/components'),
-      '@utils': resolve(__dirname, 'src/utils'),
-      '@styles': resolve(__dirname, 'src/styles'),
-      '@assets': resolve(__dirname, 'src/assets'),
+      '@': resolve(process.cwd(), 'src'),
+      '@components': resolve(process.cwd(), 'src/components'),
+      '@utils': resolve(process.cwd(), 'src/utils'),
+      '@styles': resolve(process.cwd(), 'src/styles'),
+      '@assets': resolve(process.cwd(), 'src/assets'),
     },
     
     // File extensions to resolve
@@ -189,20 +155,8 @@ export default defineConfig({
   // Environment variables configuration
   envPrefix: 'VITE_',
 
-  // JSON configuration
-  json: {
-    namedExports: true,
-    stringify: false,
-  },
-
-  // Worker configuration
-  worker: {
-    format: 'es',
-    plugins: [],
-  },
-
-  // Base URL configuration (useful for subdirectory deployments)
-  base: process.env.NODE_ENV === 'production' ? '/' : '/',
+  // Base URL configuration
+  base: '/',
 
   // Public directory
   publicDir: 'public',
@@ -212,7 +166,4 @@ export default defineConfig({
 
   // Log level
   logLevel: 'info',
-
-  // App type (SPA)
-  appType: 'spa',
 });
