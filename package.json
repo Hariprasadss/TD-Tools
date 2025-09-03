@@ -1,27 +1,14 @@
 {
   "name": "apollo-enrichment-studio",
   "version": "1.2.0",
-  "description": "Professional Contact Enrichment Platform powered by Apollo.io API - Transform your contact lists with advanced enrichment capabilities",
+  "description": "Professional Contact Enrichment Platform powered by Apollo.io API",
   "type": "module",
-  "main": "./dist/index.js",
   "scripts": {
     "dev": "vite --host --port 3000",
     "build": "vite build",
     "preview": "vite preview --port 3001",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "type-check": "tsc --noEmit",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage",
     "netlify:dev": "netlify dev",
     "deploy": "npm run build && netlify deploy --prod",
-    "deploy:preview": "npm run build && netlify deploy",
-    "clean": "rm -rf dist node_modules/.cache",
-    "postinstall": "npm run clean:cache",
-    "clean:cache": "rm -rf node_modules/.cache .eslintcache",
     "start": "npm run dev"
   },
   "keywords": [
@@ -34,25 +21,13 @@
     "linkedin",
     "email-finder",
     "bulk-processing",
-    "data-enrichment",
-    "sales-automation",
-    "b2b-data",
-    "contact-data",
-    "prospecting",
-    "sales-tools"
+    "data-enrichment"
   ],
   "author": {
     "name": "Apollo Enrichment Studio",
     "url": "https://apollo-enrichment-studio.netlify.app"
   },
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-username/apollo-enrichment-studio.git"
-  },
-  "bugs": {
-    "url": "https://github.com/your-username/apollo-enrichment-studio/issues"
-  },
   "homepage": "https://apollo-enrichment-studio.netlify.app",
   "dependencies": {
     "react": "^18.3.1",
@@ -60,28 +35,14 @@
     "lucide-react": "^0.540.0"
   },
   "devDependencies": {
-    "@types/node": "^20.15.2",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
     "@netlify/functions": "^2.8.2",
-    "@netlify/vite-plugin": "^1.1.0",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^4.6.2",
     "postcss": "^8.4.47",
-    "prettier": "^3.4.2",
     "tailwindcss": "^3.4.17",
-    "terser": "^5.36.0",
-    "typescript": "^5.7.3",
     "vite": "^5.4.11"
-  },
-  "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
   },
   "engines": {
     "node": ">=18.0.0",
