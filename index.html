@@ -3,35 +3,94 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#1e293b" />
+    
+    <!-- Primary Meta Tags -->
     <title>Apollo Enrichment Studio - Professional Contact Enrichment Platform</title>
-    <meta name="description" content="Transform your contact lists with powerful Apollo.io API integration. Enrich thousands of contacts with LinkedIn profiles, job titles, emails, and company data in real-time." />
-    <meta name="keywords" content="Apollo, contact enrichment, lead generation, sales intelligence, CRM, LinkedIn, email finding" />
+    <meta name="title" content="Apollo Enrichment Studio - Professional Contact Enrichment Platform" />
+    <meta name="description" content="Transform your contact lists with powerful Apollo.io API integration. Enrich thousands of contacts with LinkedIn profiles, job titles, emails, and company data in real-time. Professional-grade sales intelligence tool." />
+    <meta name="keywords" content="Apollo, contact enrichment, lead generation, sales intelligence, CRM, LinkedIn, email finding, Apollo.io API, bulk processing, data enrichment" />
+    <meta name="author" content="Apollo Enrichment Studio" />
+    <meta name="robots" content="index, follow" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://apollo-enrichment-studio.netlify.app/" />
     <meta property="og:title" content="Apollo Enrichment Studio - Professional Contact Enrichment" />
-    <meta property="og:description" content="Transform your contact lists with powerful Apollo.io API integration. Enrich thousands of contacts with LinkedIn profiles, job titles, emails, and company data." />
+    <meta property="og:description" content="Transform your contact lists with powerful Apollo.io API integration. Enrich thousands of contacts with LinkedIn profiles, job titles, emails, and company data in real-time." />
     <meta property="og:image" content="https://apollo-enrichment-studio.netlify.app/preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Apollo Enrichment Studio" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://apollo-enrichment-studio.netlify.app/" />
     <meta property="twitter:title" content="Apollo Enrichment Studio - Professional Contact Enrichment" />
-    <meta property="twitter:description" content="Transform your contact lists with powerful Apollo.io API integration. Professional-grade contact enrichment platform." />
+    <meta property="twitter:description" content="Transform your contact lists with powerful Apollo.io API integration. Professional-grade contact enrichment platform for sales and marketing teams." />
     <meta property="twitter:image" content="https://apollo-enrichment-studio.netlify.app/preview.png" />
+    <meta property="twitter:creator" content="@apollioenrichment" />
 
     <!-- Performance and Security -->
-    <link rel="preconnect" href="https://api.apollo.io">
-    <link rel="dns-prefetch" href="https://api.apollo.io">
+    <link rel="preconnect" href="https://api.apollo.io" crossorigin />
+    <link rel="dns-prefetch" href="https://api.apollo.io" />
+    <link rel="preload" href="/src/main.jsx" as="script" />
     
-    <!-- Styles -->
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Apollo Studio" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Apollo Enrichment Studio",
+      "description": "Professional Contact Enrichment Platform powered by Apollo.io API",
+      "url": "https://apollo-enrichment-studio.netlify.app/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Apollo Enrichment Studio"
+      }
+    }
+    </script>
+    
+    <!-- Critical CSS -->
     <style>
+      /* Critical above-the-fold styles */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        line-height: 1.6;
+      }
+      
+      #loading-screen {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease-in-out;
+      }
+      
       .loading-spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid #f3f4f6;
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(139, 92, 246, 0.2);
         border-top: 4px solid #8b5cf6;
         border-radius: 50%;
         animation: spin 1s linear infinite;
@@ -42,42 +101,221 @@
         100% { transform: rotate(360deg); }
       }
       
-      .glass {
+      .loading-content {
+        text-align: center;
+        color: white;
+      }
+      
+      .loading-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, #60a5fa, #a855f7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 1rem 0 0.5rem 0;
+      }
+      
+      .loading-subtitle {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+      
+      .glass-effect {
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 2rem;
       }
       
-      * {
-        transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+      /* Preload critical fonts */
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      }
+      
+      /* Prevent layout shift */
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Dark mode by default */
+      :root {
+        color-scheme: dark;
+      }
+      
+      /* Accessibility improvements */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      
+      @media (prefers-contrast: high) {
+        #loading-screen {
+          background: #000;
+        }
+        .loading-spinner {
+          border-color: #fff;
+          border-top-color: #8b5cf6;
+        }
       }
     </style>
   </head>
-  <body class="bg-slate-900 text-white">
-    <div id="loading-screen" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50">
-      <div class="text-center">
-        <div class="loading-spinner mx-auto mb-4"></div>
-        <h2 class="text-xl font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-          Loading Apollo Enrichment Studio...
-        </h2>
-        <p class="text-gray-400 text-sm mt-2">Initializing your professional contact enrichment platform</p>
+  
+  <body class="bg-slate-900 text-white antialiased">
+    <!-- Loading Screen -->
+    <div id="loading-screen" aria-label="Loading Apollo Enrichment Studio">
+      <div class="glass-effect">
+        <div class="loading-content">
+          <div class="loading-spinner mx-auto" role="status" aria-hidden="true"></div>
+          <h1 class="loading-title">Apollo Enrichment Studio</h1>
+          <p class="loading-subtitle">Initializing your professional contact enrichment platform...</p>
+        </div>
       </div>
     </div>
     
-    <div id="root"></div>
+    <!-- App Container -->
+    <div id="root" role="main"></div>
     
+    <!-- Error Fallback (No-JS) -->
+    <noscript>
+      <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0f172a; color: white; text-align: center; padding: 2rem;">
+        <div>
+          <h1 style="color: #8b5cf6; margin-bottom: 1rem;">Apollo Enrichment Studio</h1>
+          <p style="color: #94a3b8; margin-bottom: 2rem;">This application requires JavaScript to run properly.</p>
+          <p style="color: #64748b;">Please enable JavaScript in your browser and refresh the page.</p>
+        </div>
+      </div>
+    </noscript>
+    
+    <!-- Scripts -->
     <script type="module">
+      // Import the main application
       import './src/main.jsx';
       
+      // Enhanced loading screen management
+      const loadingScreen = document.getElementById('loading-screen');
+      let isAppReady = false;
+      let hasMinTimeElapsed = false;
+      
+      // Minimum loading time for better UX
+      const minLoadingTime = 800;
+      const startTime = Date.now();
+      
+      // Function to hide loading screen
+      function hideLoadingScreen() {
+        if (isAppReady && hasMinTimeElapsed && loadingScreen) {
+          loadingScreen.style.opacity = '0';
+          loadingScreen.style.pointerEvents = 'none';
+          
+          setTimeout(() => {
+            if (loadingScreen && loadingScreen.parentNode) {
+              loadingScreen.remove();
+            }
+          }, 300);
+        }
+      }
+      
+      // Wait for minimum time
+      setTimeout(() => {
+        hasMinTimeElapsed = true;
+        hideLoadingScreen();
+      }, minLoadingTime);
+      
+      // App ready handler
       window.addEventListener('load', () => {
+        // Additional safety delay
         setTimeout(() => {
-          const loading = document.getElementById('loading-screen');
-          if (loading) {
-            loading.style.opacity = '0';
-            setTimeout(() => loading.remove(), 300);
-          }
-        }, 500);
+          isAppReady = true;
+          hideLoadingScreen();
+        }, 200);
       });
+      
+      // Performance monitoring
+      if ('performance' in window) {
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            const perfData = performance.getEntriesByType('navigation')[0];
+            if (perfData) {
+              console.log('⚡ App Performance:', {
+                loadTime: Math.round(perfData.loadEventEnd - perfData.fetchStart),
+                domReady: Math.round(perfData.domContentLoadedEventEnd - perfData.fetchStart),
+                firstPaint: Math.round(performance.getEntriesByType('paint')[0]?.startTime || 0)
+              });
+            }
+          }, 0);
+        });
+      }
+      
+      // Error handling for failed module loads
+      window.addEventListener('error', (event) => {
+        if (event.error && event.error.message.includes('import')) {
+          console.error('Module loading failed:', event.error);
+          
+          // Show error state
+          const errorHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0f172a; color: white; text-align: center; padding: 2rem;">
+              <div style="max-width: 400px;">
+                <div style="width: 60px; height: 60px; background: rgba(239, 68, 68, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                  <span style="font-size: 2rem;">⚠️</span>
+                </div>
+                <h1 style="color: #ef4444; margin-bottom: 1rem; font-size: 1.5rem;">Loading Error</h1>
+                <p style="color: #94a3b8; margin-bottom: 2rem; line-height: 1.6;">
+                  Apollo Enrichment Studio failed to load properly. This might be due to a network issue or browser compatibility.
+                </p>
+                <button onclick="window.location.reload()" style="background: #8b5cf6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+                  Reload Application
+                </button>
+              </div>
+            </div>
+          `;
+          
+          document.body.innerHTML = errorHTML;
+        }
+      });
+      
+      // Service Worker registration (if available)
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('✅ Service Worker registered:', registration.scope);
+            })
+            .catch(error => {
+              console.log('ℹ️ Service Worker registration failed (optional):', error);
+            });
+        });
+      }
+      
+      // Theme detection and application
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      const html = document.documentElement;
+      
+      function updateTheme() {
+        const savedTheme = localStorage.getItem('apollo-theme');
+        if (savedTheme) {
+          html.className = savedTheme;
+        } else if (!prefersDark.matches) {
+          html.className = 'light';
+        }
+      }
+      
+      // Apply theme immediately to prevent flash
+      updateTheme();
+      
+      // Listen for theme changes
+      prefersDark.addEventListener('change', updateTheme);
     </script>
+    
+    <!-- Analytics placeholder (replace with your analytics) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script> -->
   </body>
 </html>
