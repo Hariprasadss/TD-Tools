@@ -114,30 +114,68 @@ const ApolloEnrichmentStudio = () => {
         
         addLog(`🔄 Processing batch ${i + 1}/${batches} (${batch.length} contacts)`, 'info');
 
-        // Simulate API call with mock data
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const enrichedBatch = batch.map(contact => ({
-          ...contact,
-          title: 'Senior Software Engineer',
-          company: 'Tech Company Inc.',
-          linkedin: `https://linkedin.com/in/${contact.firstName.toLowerCase()}-${contact.lastName.toLowerCase()}`,
-          phone: '+1-555-0123',
-          enrichmentStatus: Math.random() > 0.1 ? 'success' : 'failed',
-          qualityScore: Math.floor(Math.random() * 40) + 60
-        }));
+        try {
+          // Call Netlify Function
+          const response = await fetch('/.netlify/functions/enrich', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              apiKey,
+              contacts: batch,
+              options: enrichmentSettings
+            })
+          });
 
-        setEnrichedData(prev => [...prev, ...enrichedBatch]);
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `HTTP ${response.status}`);
+          }
+
+          const result = await response.json();
+          
+          if (result.success) {
+            setEnrichedData(prev => [...prev, ...result.data]);
+            addLog(`✅ Batch ${i + 1} completed: ${result.stats.successfulEnrichments} successes, ${result.stats.failedEnrichments} failures`, 'success');
+            
+            setStats(prev => ({
+              ...prev,
+              processed: prev.processed + batch.length,
+              successful: prev.successful + result.stats.successfulEnrichments,
+              failed: prev.failed + result.stats.failedEnrichments,
+              apiCalls: prev.apiCalls + 1,
+              creditsUsed: prev.creditsUsed + batch.length
+            }));
+          } else {
+            throw new Error(result.message || 'Unknown error');
+          }
+        } catch (batchError) {
+          addLog(`❌ Batch ${i + 1} failed: ${batchError.message}`, 'error');
+          
+          // Create mock data for failed batch to continue processing
+          const mockBatch = batch.map(contact => ({
+            ...contact,
+            title: null,
+            company: null,
+            enrichmentStatus: 'failed',
+            qualityScore: 0
+          }));
+          
+          setEnrichedData(prev => [...prev, ...mockBatch]);
+          setStats(prev => ({
+            ...prev,
+            processed: prev.processed + batch.length,
+            failed: prev.failed + batch.length
+          }));
+        }
+
         setProgress(((i + 1) / batches) * 100);
         
-        setStats(prev => ({
-          ...prev,
-          processed: prev.processed + batch.length,
-          successful: prev.successful + enrichedBatch.filter(c => c.enrichmentStatus === 'success').length,
-          failed: prev.failed + enrichedBatch.filter(c => c.enrichmentStatus === 'failed').length,
-          apiCalls: prev.apiCalls + 1,
-          creditsUsed: prev.creditsUsed + batch.length
-        }));
+        // Add delay between batches to avoid rate limiting
+        if (i < batches - 1) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
       }
 
       if (!isPaused) {
@@ -162,7 +200,7 @@ const ApolloEnrichmentStudio = () => {
       return;
     }
 
-    const headers = ['firstName', 'lastName', 'email', 'domain', 'title', 'company', 'linkedin', 'phone', 'qualityScore', 'enrichmentStatus'];
+    const headers = ['firstName', 'lastName', 'email', 'domain', 'title', 'company', 'linkedinUrl', 'workEmail', 'personalEmail', 'directPhone', 'mobilePhone', 'industry', 'location', 'qualityScore', 'enrichmentStatus'];
     const csvContent = [
       headers.join(','),
       ...enrichedData.map(row => 
@@ -524,7 +562,7 @@ const ApolloEnrichmentStudio = () => {
                       <tr key={index} className={`border-t ${isDark ? 'border-slate-600/30 hover:bg-slate-600/20' : 'border-gray-200/30 hover:bg-gray-50'} transition-colors`}>
                         <td className="p-3">
                           <div>{contact.firstName} {contact.lastName}</div>
-                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{contact.email || 'No email'}</div>
+                          <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{contact.workEmail || contact.email || 'No email'}</div>
                         </td>
                         <td className="p-3">{contact.title || '-'}</td>
                         <td className="p-3">{contact.company || '-'}</td>
